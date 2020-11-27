@@ -1,5 +1,5 @@
-import commonjs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 
 export default {
@@ -16,16 +16,26 @@ export default {
 	],
 	plugins: [
 		nodeResolve({
-			jsnext: true,
-			main: true
+			mainFields: ['jsnext', 'module', 'main']
 		}),
 
 		commonjs({
-			sourceMap: false  // Default: true
+			sourceMap: false // Default: true
 		}),
 
 		babel({
-			plugins: ['external-helpers']
+			presets: [
+				[
+					'@babel/preset-env',
+					{
+						modules: false
+					}
+				]
+			],
+			plugins: [
+				'@babel/plugin-transform-object-assign',
+				'@babel/external-helpers'
+			]
 		})
 	]
 };
